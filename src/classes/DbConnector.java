@@ -4,9 +4,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Vector;
 
-public class dbConnector {
+public class DbConnector {
 
-    public dbConnector() {
+    public DbConnector() {
 
     }
 
@@ -16,7 +16,7 @@ public class dbConnector {
             String myDriver = "com.mysql.jdbc.Driver";
             String myUrl = "jdbc:mysql://localhost/shapes";
             Class.forName(myDriver);
-            Connection conn = DriverManager.getConnection(myUrl, "Admin", "Admin");
+            Connection conn = DriverManager.getConnection(myUrl, "root", "");
             // create the java statement
             Statement st = conn.createStatement();
             // execute the query, and get a java resultset

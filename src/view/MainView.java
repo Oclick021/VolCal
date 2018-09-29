@@ -4,10 +4,7 @@ import classes.*;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.xml.transform.Result;
 import java.awt.event.*;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.Vector;
 
 public class MainView {
@@ -84,7 +81,7 @@ public class MainView {
     }
 
     void fillHistory(){
-        dbConnector db = new dbConnector();
+        DbConnector db = new DbConnector();
         Vector<String> result = db.get("Select * from cube");
         HistoryList.setListData(result.toArray());
     }
