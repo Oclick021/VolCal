@@ -1,6 +1,7 @@
 package view;
 
 import classes.*;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -31,6 +32,8 @@ public class MainView {
     private JLabel lblCylinderHoogte;
     private JLabel lblCylinderStraal;
     private JLabel lblCylinderAntwoord;
+    private JFormattedTextField txtBoxStraal;
+    private JButton calculateButton;
 
     public MainView() {
         fillHistory();
@@ -39,9 +42,27 @@ public class MainView {
         addEvents();
 
 
-
+        calculateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                calculateCylinder();
+            }
+        });
     }
 
+
+
+        void calculateCylinder(){
+        if (tryParseDouble(txtboxCylinderHoogte.getText())&&tryParseDouble(txtboxCylinderStraal.getText())){
+
+            double height = Double.parseDouble(txtboxCylinderHoogte.getText());
+            double radius = Double.parseDouble(txtboxCylinderStraal.getText());
+
+            Cylinder cylinder = new Cylinder(height,radius);
+            lblCylinderAntwoord.setText(Double.toString(cylinder.getVolume()));
+
+        }
+}
     void createWindow() {
         frame = new JFrame("MainView");
         frame.setContentPane(panel1);
@@ -80,11 +101,31 @@ public class MainView {
         mb.add(menu);
     }
 
-    void fillHistory(){
+    void fillHistory() {
         DbConnector db = new DbConnector();
         Vector<String> result = db.get("Select * from cube");
-        HistoryList.setListData(result.toArray());
+        //HistoryList.setListData(result.toArray());
     }
+
+    boolean tryParseInt(String value) {
+        try {
+            Integer.parseInt(value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    boolean tryParseDouble(String value) {
+        try {
+            Double.parseDouble(value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+
     void load(boolean isLocal) {
 
     }
@@ -101,6 +142,7 @@ public class MainView {
                 save(true);
             }
         });
+
         saveInDBMenuITem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -119,7 +161,6 @@ public class MainView {
                 load(false);
             }
         });
-
 
 
         HistoryList.addListSelectionListener(new ListSelectionListener() {
