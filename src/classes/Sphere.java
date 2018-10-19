@@ -2,10 +2,10 @@ package classes;
 
 import interfaces.IShape;
 
-public abstract class Sphere implements IShape {
+public  class Sphere implements IShape {
 
 
-    public Double getRadius() {
+    public double getRadius() {
         return radius;
     }
     public void setRadius(Double radius) {
@@ -13,15 +13,22 @@ public abstract class Sphere implements IShape {
     }
 
 
-    private  Double radius;
+    private  double radius;
     public Sphere(Double radius) {
         this.radius = radius;
     }
-
-    public Double getVolume(Double radius) {
+    @Override
+    public double getVolume() {
         //3/4 * pi * r^3
         return (.75*Math.PI*Math.pow(radius, 3));
     }
+
+    @Override
+    public String toString() {
+      return String.format("Bol:  Volume:%.3f,  Straal:%s",getVolume(),radius);
+
+    }
+
     public void checkVariables() {
     }
     public void save() {

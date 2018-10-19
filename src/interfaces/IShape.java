@@ -1,7 +1,7 @@
 package interfaces;
 
 public interface IShape {
-    public abstract double calculate();
+    public  double getVolume();
     void checkVariables();
     void save();
 }

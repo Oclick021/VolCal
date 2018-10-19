@@ -1,9 +1,8 @@
 package classes;
 
-import interfaces.IFile;
 import interfaces.IShape;
 
-public abstract class Cylinder implements IShape {
+public  class Cylinder implements IShape {
 
     public double getHeight() {
         return height;
@@ -29,7 +28,7 @@ public abstract class Cylinder implements IShape {
         this.radius = radius;
     }
 
-    public Double getVolume() {
+    public double getVolume() {
         //pi * radius^2 * height
         return (Math.PI* Math.pow(radius, 2) * height);
     }

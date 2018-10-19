@@ -2,7 +2,7 @@ package classes;
 
 import interfaces.IShape;
 
-public abstract class Cube implements IShape  {
+public  class Cube implements IShape  {
 
     public double getLength() {
         return length;
