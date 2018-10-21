@@ -2,5 +2,5 @@ package interfaces;
 
 public interface IShape {
     double getVolume();
-    void save();
+    void saveOnDB();
 }

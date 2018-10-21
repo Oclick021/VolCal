@@ -6,6 +6,7 @@ import interfaces.IShape;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import java.awt.*;
 import java.awt.event.*;
 
 import java.util.Vector;
@@ -14,7 +15,7 @@ public class MainView {
 
     private JFrame frame;
     private JMenu menu, saveSubMenu, loadSubMenu;
-    private JMenuItem saveMenuItem, saveInDBMenuITem, loadMenuItem, loadFromDBMenuITem;
+    private JMenuItem saveMenuItem, saveMenuJson, saveInDBMenuITem, loadMenuItem, loadMenuJson, loadFromDBMenuITem;
     private JMenuBar mb;
     private JTabbedPane TabMain;
     private JPanel panel1;
@@ -36,34 +37,60 @@ public class MainView {
     private JFormattedTextField txtBoxBolStraal;
     private JPanel panel2;
     private JButton calculateButton;
+    private JButton button1;
+    private JButton button2;
+    private JPanel j1;
 
     private Vector<IShape> historyListItems = new Vector<>();
+
     public MainView() {
-        fillHistory();
-        createWindow();
         createMenubar();
+        createWindow();
+
         addEvents();
 
 
-
-        calculateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-               calculateSphere();
-            }
-        });
     }
-void  calculateSphere(){
-    if (txtBoxBolStraal != null){
-        if (tryParseDouble(txtBoxBolStraal.getText())){
-            double n = Double.parseDouble(txtBoxBolStraal.getText());
-            Sphere sphere = new Sphere(n);
-            lblBolAnswer.setText(""+sphere.getVolume());
-            historyListItems.add(sphere);
+
+    void calculateCube() {
+        if (tryParseDouble(txtBlokBreede.getText()) && tryParseDouble(txtBlokHoogte.getText()) && tryParseDouble(txtboxBlokLengte.getText())) {
+            double length = Double.parseDouble(txtboxBlokLengte.getText());
+            double height = Double.parseDouble(txtBlokHoogte.getText());
+            double width = Double.parseDouble(txtBlokBreede.getText());
+            Cube cube = new Cube(length, width, height);
+            lblBlokAnswer.setText("" + cube.getVolume());
+            historyListItems.add(cube);
+            HistoryList.setListData(historyListItems);
+        }
+
+
+    }
+
+    void calculateCylinder() {
+        if (tryParseDouble(txtboxCylinderHoogte.getText()) && tryParseDouble(txtboxCylinderStraal.getText())) {
+
+            double height = Double.parseDouble(txtboxCylinderHoogte.getText());
+            double radius = Double.parseDouble(txtboxCylinderStraal.getText());
+
+            Cylinder cylinder = new Cylinder(height, radius);
+            lblCylinderAntwoord.setText(Double.toString(cylinder.getVolume()));
+            historyListItems.add(cylinder);
             HistoryList.setListData(historyListItems);
         }
     }
-}
+
+    void calculateSphere() {
+        if (txtBoxBolStraal != null) {
+            if (tryParseDouble(txtBoxBolStraal.getText())) {
+                double n = Double.parseDouble(txtBoxBolStraal.getText());
+                Sphere sphere = new Sphere(n);
+                lblBolAnswer.setText("" + sphere.getVolume());
+                historyListItems.add(sphere);
+                HistoryList.setListData(historyListItems);
+            }
+        }
+    }
+
     void createWindow() {
         frame = new JFrame("MainView");
         frame.setContentPane(panel1);
@@ -71,6 +98,8 @@ void  calculateSphere(){
         frame.pack();
         frame.setSize(800, 800);
         frame.setJMenuBar(mb);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setLocation(dim.width / 2 - frame.getSize().width / 2, dim.height / 2 - frame.getSize().height / 2);
         frame.setLayout(null);
         frame.setVisible(true);
     }
@@ -79,21 +108,24 @@ void  calculateSphere(){
         menu = new JMenu("Menu");
         saveSubMenu = new JMenu("Save");
         saveMenuItem = new JMenuItem("Save in file");
+        saveMenuJson = new JMenuItem("Save in Json");
 
         saveInDBMenuITem = new JMenuItem("Save in database");
 
         saveSubMenu.add(saveMenuItem);
+        saveSubMenu.add(saveMenuJson);
         saveSubMenu.add(saveInDBMenuITem);
 
         menu.add(saveSubMenu);
 
         loadSubMenu = new JMenu("Load");
         loadMenuItem = new JMenuItem("Load from file");
-
+        loadMenuJson = new JMenuItem("Load from Json");
         loadFromDBMenuITem = new JMenuItem("Load from databse");
 
 
         loadSubMenu.add(loadMenuItem);
+        loadSubMenu.add(loadMenuJson);
         loadSubMenu.add(loadFromDBMenuITem);
         menu.add(loadSubMenu);
 
@@ -103,10 +135,14 @@ void  calculateSphere(){
     }
 
     void fillHistory() {
-        DbConnector db = new DbConnector();
-        Vector<String> result = db.get("Select * from cube");
-        HistoryList.setListData(result.toArray());
+
+        historyListItems.clear();
+        historyListItems.addAll(Cube.GetCubesFromDB());
+        historyListItems.addAll(Sphere.GetCylinderFromDB());
+        historyListItems.addAll(Cylinder.GetCylinderFromDB());
+        HistoryList.setListData(historyListItems);
     }
+
 
     boolean tryParseDouble(String value) {
         try {
@@ -114,6 +150,12 @@ void  calculateSphere(){
             return true;
         } catch (NumberFormatException e) {
             return false;
+        }
+    }
+
+    void saveOnDB() {
+        for (IShape i : historyListItems){
+        i.saveOnDB();
         }
     }
 
@@ -125,8 +167,30 @@ void  calculateSphere(){
 
     }
 
-
     void addEvents() {
+
+
+        calculateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                calculateSphere();
+            }
+        });
+        button1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                calculateCylinder();
+
+            }
+        });
+        button2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                calculateCube();
+            }
+        });
+
+
         saveMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -149,10 +213,16 @@ void  calculateSphere(){
         loadFromDBMenuITem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                load(false);
+                fillHistory();
             }
         });
 
+        saveInDBMenuITem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveOnDB();
+            }
+        });
 
         HistoryList.addListSelectionListener(new ListSelectionListener() {
             @Override

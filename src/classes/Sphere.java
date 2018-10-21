@@ -2,8 +2,12 @@ package classes;
 
 import interfaces.IShape;
 
+import java.sql.ResultSet;
+import java.util.Vector;
+
 public  class Sphere implements IShape {
 
+    private  int sphereID;
 
     public double getRadius() {
         return radius;
@@ -16,6 +20,10 @@ public  class Sphere implements IShape {
     private  double radius;
     public Sphere(Double radius) {
         this.radius = radius;
+    }
+    public Sphere(Double radius, int id) {
+        this.radius = radius;
+        sphereID = id;
     }
     @Override
     public double getVolume() {
@@ -31,6 +39,24 @@ public  class Sphere implements IShape {
 
     public void checkVariables() {
     }
-    public void save() {
+    public void saveOnDB() {
+        DbConnector con = new DbConnector();
+        con.Insert(String.format("INSERT IGNORE INTO sphere (radius) VALUES (%s)",getRadius()));
+    }
+    public static Vector<Sphere> GetCylinderFromDB(){
+        Vector<Sphere> spheres= new Vector<Sphere>();
+        DbConnector db = new DbConnector();
+
+        try{
+            ResultSet rs = db.get("SELECT  * FROM  Sphere");
+            while (rs.next()) {
+                spheres.add(new Sphere(Double.parseDouble(rs.getString("radius"))));
+            }
+        }
+        catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return spheres;
     }
 }
