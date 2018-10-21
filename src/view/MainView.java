@@ -1,11 +1,13 @@
 package view;
 
 import classes.*;
+import interfaces.IShape;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.*;
+
 import java.util.Vector;
 
 public class MainView {
@@ -17,7 +19,6 @@ public class MainView {
     private JTabbedPane TabMain;
     private JPanel panel1;
     private JList HistoryList;
-    private JTextField txtboxBolStraal;
     private JTextField txtBlokHoogte;
     private JTextField txtboxBlokLengte;
     private JTextField txtBlokBreede;
@@ -32,9 +33,11 @@ public class MainView {
     private JLabel lblCylinderHoogte;
     private JLabel lblCylinderStraal;
     private JLabel lblCylinderAntwoord;
-    private JFormattedTextField txtBoxStraal;
+    private JFormattedTextField txtBoxBolStraal;
+    private JPanel panel2;
     private JButton calculateButton;
 
+    private Vector<IShape> historyListItems = new Vector<>();
     public MainView() {
         fillHistory();
         createWindow();
@@ -42,26 +45,24 @@ public class MainView {
         addEvents();
 
 
+
         calculateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                calculateCylinder();
+               calculateSphere();
             }
         });
     }
-
-
-
-        void calculateCylinder(){
-        if (tryParseDouble(txtboxCylinderHoogte.getText())&&tryParseDouble(txtboxCylinderStraal.getText())){
-
-            double height = Double.parseDouble(txtboxCylinderHoogte.getText());
-            double radius = Double.parseDouble(txtboxCylinderStraal.getText());
-
-            Cylinder cylinder = new Cylinder(height,radius);
-            lblCylinderAntwoord.setText(Double.toString(cylinder.getVolume()));
-
+void  calculateSphere(){
+    if (txtBoxBolStraal != null){
+        if (tryParseDouble(txtBoxBolStraal.getText())){
+            double n = Double.parseDouble(txtBoxBolStraal.getText());
+            Sphere sphere = new Sphere(n);
+            lblBolAnswer.setText(""+sphere.getVolume());
+            historyListItems.add(sphere);
+            HistoryList.setListData(historyListItems);
         }
+    }
 }
     void createWindow() {
         frame = new JFrame("MainView");
@@ -104,16 +105,7 @@ public class MainView {
     void fillHistory() {
         DbConnector db = new DbConnector();
         Vector<String> result = db.get("Select * from cube");
-        //HistoryList.setListData(result.toArray());
-    }
-
-    boolean tryParseInt(String value) {
-        try {
-            Integer.parseInt(value);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
+        HistoryList.setListData(result.toArray());
     }
 
     boolean tryParseDouble(String value) {
@@ -124,7 +116,6 @@ public class MainView {
             return false;
         }
     }
-
 
     void load(boolean isLocal) {
 

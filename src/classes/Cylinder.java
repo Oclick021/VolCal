@@ -3,31 +3,7 @@ package classes;
 import interfaces.IFile;
 import interfaces.IShape;
 
-public class Cylinder implements IShape {
-
-    private  double height;
-    private  double radius;
-
-    public Cylinder(double height, double radius) {
-        this.height = height;
-        this.radius = radius;
-    }
-
-    @Override
-    public double getVolume() {
-        //pi * radius^2 * height
-        return (Math.PI* Math.pow(radius, 2) * height);
-    }
-
-    @Override
-    public void save() {
-
-    }
-
-    @Override
-    public String toString() {
-        return  String.format("Cylinder: Volume:%s Straal:%s Hoogte:%s", getVolume(), radius, height);
-    }
+public abstract class Cylinder implements IShape {
 
     public double getHeight() {
         return height;
@@ -45,4 +21,22 @@ public class Cylinder implements IShape {
         this.radius = radius;
     }
 
+    private  double height;
+    private  double radius;
+
+    public Cylinder(double height, double radius) {
+        this.height = height;
+        this.radius = radius;
+    }
+
+    public Double getVolume() {
+        //pi * radius^2 * height
+        return (Math.PI* Math.pow(radius, 2) * height);
+    }
+
+    public void checkVariables() {
+    }
+
+    public void save() {
+    }
 }
