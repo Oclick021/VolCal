@@ -1,21 +1,17 @@
 package classes;
 
-import interfaces.IFile;
 import interfaces.IShape;
 
-import java.io.PrintWriter;
-
-public  class Cube implements IShape {
 import java.sql.ResultSet;
 import java.util.Vector;
 
-public  class Cube implements IShape  {
+public class Cube implements IShape {
 
-    private  int cubeID = 0;
+    private int cubeID = 0;
     private double length;
-    private  double width;
-    private  double height;
-    private String appData;
+    private double width;
+    private double height;
+
 
     public Cube(double lenght, double width, double height) {
         this.length = lenght;
@@ -24,7 +20,7 @@ public  class Cube implements IShape  {
     }
 
     @Override
-    public  double getVolume() {
+    public double getVolume() {
         return (length * width * height);
     }
 
@@ -33,26 +29,26 @@ public  class Cube implements IShape  {
         DbConnector con = new DbConnector();
         if (cubeID == 0)
             con.Insert(String.format("INSERT IGNORE INTO cube (height, lenght, width)\n" +
-                    "  VALUES (%s, %s, %s)",height,length,width));
+                    "  VALUES (%s, %s, %s)", height, length, width));
         else
-        con.Insert(String.format("UPDATE cube SET height = %s, lenght = %s,width = %s WHERE cub1 = %s",height,length,width,cubeID));
+            con.Insert(String.format("UPDATE cube SET height = %s, lenght = %s,width = %s WHERE cub1 = %s", height, length, width, cubeID));
+    }
 
-    public void saveAsJson(){
-        String cubeString = String.format("Cube|%s|%s|%s", ""+length, ""+height, ""+width);
+    @Override
+    public void saveAsJson() {
+        String cubeString = String.format("Cube|%s|%s|%s", "" + length, "" + height, "" + width);
         JSONFile file = new JSONFile("Cube", cubeString);
     }
 
-    public void saveAsDatabase(){
-
-    }
-    public void saveAsText(){
-        String cubeString = String.format("Cube|%s|%s|%s", ""+length, ""+height, ""+width);
+    @Override
+    public void saveAsText() {
+        String cubeString = String.format("Cube|%s|%s|%s", "" + length, "" + height, "" + width);
         TextFile file = new TextFile(cubeString);
     }
 
     @Override
     public String toString() {
-        return String.format("Balk: Volume:%.3f Lengte:%s Hoogte:%s Breedte:%s", getVolume(), length, height,width);
+        return String.format("Balk: Volume:%.3f Lengte:%s Hoogte:%s Breedte:%s", getVolume(), length, height, width);
     }
 
     public double getLength() {
@@ -80,22 +76,20 @@ public  class Cube implements IShape  {
     }
 
 
-
-    public static Vector<Cube> GetCubesFromDB(){
+    public static Vector<Cube> GetCubesFromDB() {
         Vector<Cube> cubes = new Vector<Cube>();
         DbConnector db = new DbConnector();
 
-        try{
+        try {
             ResultSet rs = db.get("Select * from Cube");
             while (rs.next()) {
-                cubes.add(new Cube(Double.parseDouble(rs.getString("lenght")),Double.parseDouble(rs.getString("width")),Double.parseDouble(rs.getString("height"))));
+                cubes.add(new Cube(Double.parseDouble(rs.getString("lenght")), Double.parseDouble(rs.getString("width")), Double.parseDouble(rs.getString("height"))));
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
         }
-       return cubes;
+        return cubes;
     }
 
 }

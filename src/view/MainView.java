@@ -20,28 +20,12 @@ public class MainView {
     private JTabbedPane TabMain;
     private JPanel panel1;
     private JList HistoryList;
-    private JTextField txtBlokHoogte;
-    private JTextField txtboxBlokLengte;
-    private JTextField txtBlokBreede;
-    private JTextField txtboxCylinderStraal;
-    private JTextField txtboxCylinderHoogte;
-    private JLabel lblBolAnswer;
-    private JLabel lblBolStraal;
-    private JLabel lblBlokHoogte;
-    private JLabel lblBlokLengte;
-    private JLabel lblBlokBreede;
-    private JLabel lblBlokAnswer;
-    private JLabel lblCylinderHoogte;
-    private JLabel lblCylinderStraal;
-    private JLabel lblCylinderAntwoord;
+    private JTextField txtBlokHoogte, txtboxBlokLengte,txtBlokBreede, txtboxCylinderStraal, txtboxCylinderHoogte;
+    private JLabel lblBolAnswer,lblBolStraal,lblBlokHoogte, lblBlokLengte,lblBlokBreede,lblBlokAnswer, lblCylinderHoogte,lblCylinderStraal, lblCylinderAntwoord;
     private JFormattedTextField txtBoxBolStraal;
     private JPanel bolPane;
-    private JButton calculateButton;
-    private JButton button1;
-    private JButton button2;
-    private JPanel j1;
-    private JPanel blokPanel;
-    private JPanel cilinderPanel;
+    private JButton calculateButton, button1, button2;
+    private JPanel j1, blokPanel, cilinderPanel;
 
     private Vector<IShape> historyListItems = new Vector<>();
 
@@ -137,21 +121,29 @@ public class MainView {
     }
 
     void loadFromDB() {
+        try {
+            DbConnector db = new DbConnector();
+            if (db.isDbConnected()) {
+                historyListItems.clear();
+                historyListItems.addAll(Cube.GetCubesFromDB());
+                historyListItems.addAll(Sphere.GetCylinderFromDB());
+                historyListItems.addAll(Cylinder.GetCylinderFromDB());
+                HistoryList.setListData(historyListItems);
+            }
 
-        historyListItems.clear();
-        historyListItems.addAll(Cube.GetCubesFromDB());
-        historyListItems.addAll(Sphere.GetCylinderFromDB());
-        historyListItems.addAll(Cylinder.GetCylinderFromDB());
-        HistoryList.setListData(historyListItems);
+        } catch (Exception e) {
+        }
+
+
     }
 
     void saveOnDB() {
+        DbConnector db = new DbConnector();
+        if (db.isDbConnected()) {
         for (IShape i : historyListItems) {
             i.saveOnDB();
-        }
+        }}
     }
-
-
     boolean tryParseDouble(String value) {
         try {
             Double.parseDouble(value);
@@ -207,31 +199,30 @@ public class MainView {
         HistoryList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                JList source = (JList)e.getSource();
-                IShape selected =(IShape)source.getSelectedValue();
-
+                JList source = (JList) e.getSource();
+                IShape selected = (IShape) source.getSelectedValue();
 
 
                 if (selected instanceof Cube) {
                     TabMain.setSelectedIndex(1);
                     Cube cb = (Cube) selected;
-                    txtBlokHoogte.setText(cb.getHeight()+"");
-                    txtBlokBreede.setText(cb.getWidth()+"");
-                    txtboxBlokLengte.setText(cb.getLength()+"");
-                    lblBlokAnswer.setText(cb.getVolume()+"");
+                    txtBlokHoogte.setText(cb.getHeight() + "");
+                    txtBlokBreede.setText(cb.getWidth() + "");
+                    txtboxBlokLengte.setText(cb.getLength() + "");
+                    lblBlokAnswer.setText(cb.getVolume() + "");
 
                 } else if (selected instanceof Cylinder) {
                     TabMain.setSelectedIndex(2);
-                    Cylinder cl = (Cylinder)selected;
-                    txtboxCylinderHoogte.setText(cl.getHeight()+"");
-                    txtboxCylinderStraal.setText(cl.getRadius()+"");
-                    lblCylinderAntwoord.setText(cl.getVolume()+"");
+                    Cylinder cl = (Cylinder) selected;
+                    txtboxCylinderHoogte.setText(cl.getHeight() + "");
+                    txtboxCylinderStraal.setText(cl.getRadius() + "");
+                    lblCylinderAntwoord.setText(cl.getVolume() + "");
 
                 } else if (selected instanceof Sphere) {
                     TabMain.setSelectedIndex(0);
-                    Sphere sp = (Sphere)selected;
-                    txtBoxBolStraal.setText(sp.getRadius()+"");
-                    lblBolAnswer.setText(sp.getVolume()+"");
+                    Sphere sp = (Sphere) selected;
+                    txtBoxBolStraal.setText(sp.getRadius() + "");
+                    lblBolAnswer.setText(sp.getVolume() + "");
                 }
             }
         });
