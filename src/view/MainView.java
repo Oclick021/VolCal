@@ -145,9 +145,34 @@ public class MainView {
         HistoryList.setListData(historyListItems);
     }
 
+    void loadFromText(){
+        historyListItems.clear();
+        TextFile file = new TextFile();
+        historyListItems.addAll(file.loadFile());
+        HistoryList.setListData(historyListItems);
+    }
+
+    void loadFromJSON(){
+        historyListItems.clear();
+        JSONFile file = new JSONFile();
+        historyListItems.addAll(file.loadFile());
+        HistoryList.setListData(historyListItems);
+    }
+
     void saveOnDB() {
         for (IShape i : historyListItems) {
             i.saveOnDB();
+        }
+    }
+
+    void saveAsText(){
+        for (IShape i : historyListItems){
+            i.saveAsText();
+        }
+    }
+    void saveAsJson(){
+        for (IShape i : historyListItems){
+            i.saveAsJson();
         }
     }
 
@@ -202,6 +227,32 @@ public class MainView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 saveOnDB();
+            }
+        });
+        saveMenuJson.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveAsJson();
+            }
+        });
+        saveMenuItem.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveAsText();
+            }
+        });
+
+        loadMenuItem.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loadFromText();
+            }
+        });
+
+        loadMenuJson.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loadFromJSON();
             }
         });
         HistoryList.addListSelectionListener(new ListSelectionListener() {

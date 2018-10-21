@@ -1,9 +1,9 @@
 package classes;
 
-import com.mysql.cj.protocol.Resultset;
-
-import java.sql.*;
-import java.util.Vector;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class DbConnector {
 
@@ -24,7 +24,6 @@ public class DbConnector {
             Statement st = conn.createStatement();
             // execute the query, and get a java resultset
             ResultSet rs = st.executeQuery(query);
-
             return rs;
         } catch (Exception e) {
             System.err.println("Got an exception! ");
@@ -33,7 +32,7 @@ public class DbConnector {
         return null;
     }
 
-    public void Insert(String query) {
+    public void insert(String query) {
         try {
             Class.forName(myDriver);
             Connection conn = DriverManager.getConnection(myUrl, userName, passWord);
