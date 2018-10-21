@@ -6,22 +6,20 @@ import interfaces.IShape;
 import java.sql.ResultSet;
 import java.util.Vector;
 
+import java.io.PrintWriter;
+
 public class Cylinder implements IShape {
     private  int cylinderID = 0;
 
     private  double height;
     private  double radius;
-
+    private String appData;
 
     public Cylinder(double height, double radius) {
         this.height = height;
         this.radius = radius;
     }
-    public Cylinder(int id ,double height, double radius) {
-        this.height = height;
-        this.radius = radius;
-        cylinderID = id;
-    }
+
     @Override
     public double getVolume() {
         //pi * radius^2 * height
@@ -36,6 +34,23 @@ public class Cylinder implements IShape {
                 "  VALUES (%s, %s)",getRadius(),height));
         else
             con.Insert(String.format("UPDATE cylinder SET radius = %s, height = %s WHERE cylinderID = %s",getRadius(),height, cylinderID));
+
+
+    public void saveAsJson(){
+        String cylinderString = String.format("Cylinder|%s|%s", ""+height, ""+radius);
+        JSONFile file = new JSONFile("Sphere", cylinderString);
+        file.save();
+    }
+
+
+    public void saveAsDatabase(){
+
+    }
+
+    public void saveAsText(){
+        String cylinderString = String.format("Cylinder|%s|%s", ""+height, ""+radius);
+        TextFile file = new TextFile(cylinderString);
+        file.save();
     }
 
     @Override
@@ -47,8 +62,14 @@ public class Cylinder implements IShape {
         return height;
     }
 
+<<<<<<<<< Temporary merge branch 1
+    public double getVolume() {
+        //pi * radius^2 * height
+        return (Math.PI* Math.pow(radius, 2) * height);
+=========
     public void setHeight(double height) {
         this.height = height;
+>>>>>>>>> Temporary merge branch 2
     }
 
     public double getRadius() {

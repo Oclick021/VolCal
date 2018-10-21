@@ -1,8 +1,11 @@
 package classes;
 
-import com.mysql.cj.protocol.Resultset;
+import interfaces.IFile;
 import interfaces.IShape;
 
+import java.io.PrintWriter;
+
+public  class Cube implements IShape {
 import java.sql.ResultSet;
 import java.util.Vector;
 
@@ -12,17 +15,12 @@ public  class Cube implements IShape  {
     private double length;
     private  double width;
     private  double height;
+    private String appData;
 
     public Cube(double lenght, double width, double height) {
         this.length = lenght;
         this.width = width;
         this.height = height;
-    }
-    public Cube(int id,double lenght, double width, double height) {
-        this.length = lenght;
-        this.width = width;
-        this.height = height;
-        this.cubeID = id;
     }
 
     @Override
@@ -38,6 +36,18 @@ public  class Cube implements IShape  {
                     "  VALUES (%s, %s, %s)",height,length,width));
         else
         con.Insert(String.format("UPDATE cube SET height = %s, lenght = %s,width = %s WHERE cub1 = %s",height,length,width,cubeID));
+
+    public void saveAsJson(){
+        String cubeString = String.format("Cube|%s|%s|%s", ""+length, ""+height, ""+width);
+        JSONFile file = new JSONFile("Cube", cubeString);
+    }
+
+    public void saveAsDatabase(){
+
+    }
+    public void saveAsText(){
+        String cubeString = String.format("Cube|%s|%s|%s", ""+length, ""+height, ""+width);
+        TextFile file = new TextFile(cubeString);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package interfaces;
 
 public interface IFile {
-    public boolean save();
+    void save();
 
+    boolean checkConnection();
 }
