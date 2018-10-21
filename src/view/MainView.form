@@ -31,7 +31,7 @@
         </properties>
         <border type="none"/>
         <children>
-          <grid id="629a9" binding="panel2" layout-manager="GridLayoutManager" row-count="3" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="629a9" binding="bolPane" layout-manager="GridLayoutManager" row-count="3" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="10" left="10" bottom="30" right="10"/>
             <constraints>
               <tabbedpane title="Bol"/>
@@ -82,7 +82,7 @@
               </component>
             </children>
           </grid>
-          <grid id="a19b6" layout-manager="GridLayoutManager" row-count="5" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="a19b6" binding="blokPanel" layout-manager="GridLayoutManager" row-count="5" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="10" left="10" bottom="30" right="10"/>
             <constraints>
               <tabbedpane title="Blok"/>
@@ -163,7 +163,7 @@
               </component>
             </children>
           </grid>
-          <grid id="ca9c" layout-manager="GridLayoutManager" row-count="4" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="ca9c" binding="cilinderPanel" layout-manager="GridLayoutManager" row-count="4" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="10" left="10" bottom="30" right="10"/>
             <constraints>
               <tabbedpane title="Cilinder"/>

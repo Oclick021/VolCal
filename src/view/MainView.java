@@ -35,11 +35,13 @@ public class MainView {
     private JLabel lblCylinderStraal;
     private JLabel lblCylinderAntwoord;
     private JFormattedTextField txtBoxBolStraal;
-    private JPanel panel2;
+    private JPanel bolPane;
     private JButton calculateButton;
     private JButton button1;
     private JButton button2;
     private JPanel j1;
+    private JPanel blokPanel;
+    private JPanel cilinderPanel;
 
     private Vector<IShape> historyListItems = new Vector<>();
 
@@ -134,13 +136,19 @@ public class MainView {
         mb.add(menu);
     }
 
-    void fillHistory() {
+    void loadFromDB() {
 
         historyListItems.clear();
         historyListItems.addAll(Cube.GetCubesFromDB());
         historyListItems.addAll(Sphere.GetCylinderFromDB());
         historyListItems.addAll(Cylinder.GetCylinderFromDB());
         HistoryList.setListData(historyListItems);
+    }
+
+    void saveOnDB() {
+        for (IShape i : historyListItems) {
+            i.saveOnDB();
+        }
     }
 
 
@@ -153,11 +161,6 @@ public class MainView {
         }
     }
 
-    void saveOnDB() {
-        for (IShape i : historyListItems){
-        i.saveOnDB();
-        }
-    }
 
     void load(boolean isLocal) {
 
@@ -189,86 +192,50 @@ public class MainView {
                 calculateCube();
             }
         });
-
-
-        saveMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                save(true);
-            }
-        });
-
-        saveInDBMenuITem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                save(false);
-            }
-        });
-        loadMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                load(true);
-            }
-        });
         loadFromDBMenuITem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                fillHistory();
+                loadFromDB();
             }
         });
-
         saveInDBMenuITem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 saveOnDB();
             }
         });
-
         HistoryList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                ///History Selectionchanged
+                JList source = (JList)e.getSource();
+                IShape selected =(IShape)source.getSelectedValue();
+
+
+
+                if (selected instanceof Cube) {
+                    TabMain.setSelectedIndex(1);
+                    Cube cb = (Cube) selected;
+                    txtBlokHoogte.setText(cb.getHeight()+"");
+                    txtBlokBreede.setText(cb.getWidth()+"");
+                    txtboxBlokLengte.setText(cb.getLength()+"");
+                    lblBlokAnswer.setText(cb.getVolume()+"");
+
+                } else if (selected instanceof Cylinder) {
+                    TabMain.setSelectedIndex(2);
+                    Cylinder cl = (Cylinder)selected;
+                    txtboxCylinderHoogte.setText(cl.getHeight()+"");
+                    txtboxCylinderStraal.setText(cl.getRadius()+"");
+                    lblCylinderAntwoord.setText(cl.getVolume()+"");
+
+                } else if (selected instanceof Sphere) {
+                    TabMain.setSelectedIndex(0);
+                    Sphere sp = (Sphere)selected;
+                    txtBoxBolStraal.setText(sp.getRadius()+"");
+                    lblBolAnswer.setText(sp.getVolume()+"");
+                }
             }
         });
 
-        frame.addWindowListener(new WindowListener() {
-            @Override
-            public void windowOpened(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowClosing(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowClosed(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowIconified(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowDeiconified(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowActivated(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowDeactivated(WindowEvent e) {
-
-            }
-
-
-        });
     }
 
 
