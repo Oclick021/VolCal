@@ -1,12 +1,16 @@
 package classes;
 
+import interfaces.IFile;
 import interfaces.IShape;
 
-public  class Cube implements IShape  {
+import java.io.PrintWriter;
+
+public  class Cube implements IShape {
 
     private double length;
     private  double width;
     private  double height;
+    private String appData;
 
     public Cube(double lenght, double width, double height) {
         this.length = lenght;
@@ -19,8 +23,18 @@ public  class Cube implements IShape  {
         return (length * width * height);
     }
 
-    @Override
-    public void save() {
+
+    public void saveAsJson(){
+        String cubeString = String.format("Cube|%s|%s|%s", ""+length, ""+height, ""+width);
+        JSONFile file = new JSONFile("Cube", cubeString);
+    }
+
+    public void saveAsDatabase(){
+
+    }
+    public void saveAsText(){
+        String cubeString = String.format("Cube|%s|%s|%s", ""+length, ""+height, ""+width);
+        TextFile file = new TextFile(cubeString);
     }
 
     @Override

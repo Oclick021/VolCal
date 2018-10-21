@@ -36,6 +36,7 @@ public class MainView {
     private JFormattedTextField txtBoxBolStraal;
     private JPanel panel2;
     private JButton calculateButton;
+    private JButton button1;
 
     private Vector<IShape> historyListItems = new Vector<>();
     public MainView() {
@@ -52,6 +53,26 @@ public class MainView {
                calculateSphere();
             }
         });
+        button1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                calculateCylinder();
+
+            }
+        });
+    }
+    void calculateCylinder(){
+        if (tryParseDouble(txtboxCylinderHoogte.getText())&&tryParseDouble(txtboxCylinderStraal.getText())){
+
+            double height = Double.parseDouble(txtboxCylinderHoogte.getText());
+            double radius = Double.parseDouble(txtboxCylinderStraal.getText());
+
+            Cylinder cylinder = new Cylinder(height,radius);
+            lblCylinderAntwoord.setText(Double.toString(cylinder.getVolume()));
+            historyListItems.add(cylinder);
+            HistoryList.setListData(historyListItems);
+            cylinder.saveAsText();
+        }
     }
 void  calculateSphere(){
     if (txtBoxBolStraal != null){
