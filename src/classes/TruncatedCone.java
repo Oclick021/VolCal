@@ -20,7 +20,7 @@ public class TruncatedCone implements IShape {
     @Override
     public double getVolume() {
         //pi * radius^2 * height
-        return (Math.PI * height) * (Math.pow(radius1, 2) - Math.pow(radius2, 2));
+        return  (Math.PI / 3) * height * (Math.pow(radius1, 2) + Math.pow(radius2, 2) + radius2 * radius1);
     }
 
     @Override
