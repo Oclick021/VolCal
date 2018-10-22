@@ -82,6 +82,60 @@ public class JSONFile implements IFile {
     }
 
     @Override
+    public void deleteShape(IShape shape){
+        JSONObject obj = new JSONObject();
+
+        if (shape instanceof Cube){
+            Cube s = (Cube)shape;
+            obj.put("Shape", "Cube");
+            obj.put("Length",""+ s.getLength());
+            obj.put("Height",""+ s.getHeight());
+            obj.put("Width",""+ s.getWidth());
+        }
+        if (shape instanceof Sphere){
+            Sphere s = (Sphere)shape;
+            obj.put("Shape", "Sphere");
+            obj.put("Radius",""+ s.getRadius());
+        }
+        if (shape instanceof Cylinder){
+            Cylinder s = (Cylinder) shape;
+            obj.put("Shape", "Cylinder");
+            obj.put("Height", ""+s.getHeight());
+            obj.put("Radius", ""+s.getRadius());
+
+        }
+        if (shape instanceof HollowCylinder){
+            HollowCylinder s = (HollowCylinder) shape;
+            obj.put("Shape", "HollowCylinder");
+            obj.put("Height", ""+s.getHeight());
+            obj.put("Radius1", ""+s.getRadius1());
+            obj.put("Radius2", ""+s.getRadius2());
+
+        }
+        if (shape instanceof TruncatedCone){
+            TruncatedCone s = (TruncatedCone) shape;
+            obj.put("Shape", "TruncatedCone");
+            obj.put("Height", ""+s.getHeight());
+            obj.put("Radius1", ""+s.getRadius1());
+            obj.put("Radius2", ""+s.getRadius2());
+        }
+
+        shapes = getFile();
+        if (shapes.contains(obj)){
+            boolean test = shapes.remove(obj);
+        }
+
+        //Write JSON file
+        try (FileWriter file = new FileWriter(appData+"\\VolCal.json")) {
+            file.write(shapes.toJSONString());
+            file.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public JSONArray getFile(){
         //JSON parser object to parse read file
         JSONParser jsonParser = new JSONParser();
@@ -152,6 +206,15 @@ public class JSONFile implements IFile {
         File f = new File(appData + "\\VolCal.json");
         if(f.exists() && !f.isDirectory()) {
             return true;
+        }
+        else{
+            try{
+                f.createNewFile();
+                return checkConnection();
+            }
+            catch(Exception e){
+
+            }
         }
         return false;
     }

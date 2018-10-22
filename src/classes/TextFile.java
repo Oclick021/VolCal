@@ -30,8 +30,10 @@ public class TextFile implements IFile {
         }
 
         ArrayList<String> text = getFile();
-        if (!text.contains(saveString)){
-            text.add(saveString);
+        if (saveString != ""){
+            if (!text.contains(saveString)){
+                text.add(saveString);
+            }
         }
 
         try (PrintWriter out = new PrintWriter(appData+"\\VolCal.txt")) {
@@ -46,6 +48,41 @@ public class TextFile implements IFile {
     }
 
     @Override
+    public void deleteShape(IShape shape){
+        ArrayList<String> shapes = getFile();
+
+        if (shape instanceof Cube){
+            Cube s = (Cube)shape;
+            String cubeString = String.format("Cube|%s|%s|%s", "" + s.getLength(), "" + s.getHeight(), "" + s.getWidth());
+            shapes.remove(cubeString);
+        }
+        if (shape instanceof Sphere){
+            Sphere s = (Sphere)shape;
+            String sphereString = String.format("Sphere|%s", ""+s.getRadius());
+            shapes.remove(sphereString);
+        }
+        if (shape instanceof Cylinder){
+            Cylinder s = (Cylinder) shape;
+            String cylinderString = String.format("Cylinder|%s|%s", ""+s.getHeight(), ""+s.getRadius());
+            shapes.remove(cylinderString);
+
+        }
+        if (shape instanceof HollowCylinder){
+            HollowCylinder s = (HollowCylinder) shape;
+            String hollowCylinderString = String.format("HolleCylinder|%s|%s|%s", ""+s.getHeight(), ""+s.getRadius1(), s.getRadius2());
+            shapes.remove(hollowCylinderString);
+
+        }
+        if (shape instanceof TruncatedCone){
+            TruncatedCone s = (TruncatedCone) shape;
+            String truncatedConeString = String.format("TruncatedCone|%s|%s|%s", ""+s.getHeight(), ""+s.getRadius1(), s.getRadius2());
+            shapes.remove(truncatedConeString);
+        }
+        save();
+
+    }
+
+    @Override
     public ArrayList<String> getFile(){
         ArrayList<String> text = new ArrayList<>();
         try {
@@ -57,13 +94,6 @@ public class TextFile implements IFile {
             }
 
         } catch (FileNotFoundException ex) {
-            try{
-                String path = appData + "VolCal.json";
-                File file = new File(path);
-                file.createNewFile();
-            }catch(Exception e){
-
-            }
             ex.printStackTrace();
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -118,9 +148,18 @@ public class TextFile implements IFile {
 
     @Override
     public boolean checkConnection(){
-        File f = new File(appData + "\\VolCal.json");
+        File f = new File(appData + "\\VolCal.txt");
         if(f.exists() && !f.isDirectory()) {
             return true;
+        }
+        else{
+            try{
+                f.createNewFile();
+                return checkConnection();
+            }
+            catch(Exception e){
+
+            }
         }
         return false;
     }

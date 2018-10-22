@@ -12,7 +12,6 @@ public class Cube implements IShape {
     private double width;
     private double height;
 
-
     public Cube(double lenght, double width, double height) {
         this.length = lenght;
         this.width = width;
