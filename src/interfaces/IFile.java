@@ -7,4 +7,5 @@ public interface IFile {
     Object getFile();
     Vector<IShape> loadFile();
     boolean checkConnection();
+    void deleteShape(IShape shape);
 }
