@@ -36,6 +36,8 @@ public class MainView {
     private JButton btnHollowCylinder;
     private JLabel lblAnswerHollowCylinder;
     private JLabel lblAnswerTranculatedCone;
+    private JButton deleteButton;
+    private JButton cleanAllButton;
 
     private Vector<IShape> historyListItems = new Vector<>();
 
@@ -45,6 +47,57 @@ public class MainView {
 
         addEvents();
 
+
+        cleanAllButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                historyListItems.clear();
+                HistoryList.setListData(historyListItems);
+
+            }
+        });
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedIndex = HistoryList.getSelectedIndex();
+                historyListItems.remove(selectedIndex);
+                HistoryList.setListData(historyListItems);
+            }
+        });
+        cleanAllButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                historyListItems.clear();
+                HistoryList.setListData(historyListItems);
+            }
+        });
+    }
+
+    void calculateTranculatedCone() {
+        if ( tryParseDouble(txtTranConeHeight.getText())&& tryParseDouble(txtTranConeRadius1.getText()) && tryParseDouble(txtTranConeRadius2.getText())){
+            double height = Double.parseDouble(txtTranConeHeight.getText());
+            double radius1 = Double.parseDouble(txtTranConeRadius1.getText());
+            double radius2 = Double.parseDouble(txtTranConeRadius2.getText());
+            TruncatedCone tc = new TruncatedCone(height,radius1,radius2);
+            lblAnswerTranculatedCone.setText(tc.getVolume()+"");
+            historyListItems.add(tc);
+            HistoryList.setListData(historyListItems);
+        }
+    }
+
+    void calculateHollowCylinder() {
+
+
+
+        if ( tryParseDouble(txtHollowCylHeight.getText())&& tryParseDouble(txtHollowCylRadius1.getText()) && tryParseDouble(txtHollowCylRadius2.getText())){
+            double height = Double.parseDouble(txtHollowCylHeight.getText());
+            double radius1 = Double.parseDouble(txtHollowCylRadius1.getText());
+            double radius2 = Double.parseDouble(txtHollowCylRadius2.getText());
+            HollowCylinder hc = new HollowCylinder(height,radius1,radius2);
+            lblAnswerHollowCylinder.setText(hc.getVolume()+"");
+            historyListItems.add(hc);
+            HistoryList.setListData(historyListItems);
+        }
 
     }
 
@@ -58,7 +111,6 @@ public class MainView {
             historyListItems.add(cube);
             HistoryList.setListData(historyListItems);
         }
-
 
     }
 
@@ -155,21 +207,18 @@ public class MainView {
         HistoryList.setListData(historyListItems);
     }
 
-    void loadFromText(){
-        historyListItems.clear();
-        TextFile file = new TextFile();
-        historyListItems.addAll(file.loadFile());
-        HistoryList.setListData(historyListItems);
-    }
 
-    void loadFromJSON(){
-        historyListItems.clear();
-        JSONFile file = new JSONFile();
-        historyListItems.addAll(file.loadFile());
-        HistoryList.setListData(historyListItems);
-    }
+
 
     void saveOnDB() {
+
+        DbConnector db = new DbConnector();
+        db.insert("DELETE  FROM cube");
+        db.insert("DELETE  FROM cylinder");
+        db.insert("DELETE  FROM sphere");
+        db.insert("DELETE  FROM truncatedcone");
+        db.insert("DELETE  FROM hollowcylinder");
+
         for (IShape i : historyListItems) {
             i.saveOnDB();
         }
@@ -197,13 +246,6 @@ public class MainView {
     }
 
 
-    void load(boolean isLocal) {
-
-    }
-
-    void save(boolean isLocal) {
-
-    }
 
     void addEvents() {
 

@@ -1,11 +1,7 @@
 package classes;
 
-import interfaces.IFile;
 import interfaces.IShape;
 
-import java.io.PrintWriter;
-
-public  class Cube implements IShape {
 import java.sql.ResultSet;
 import java.util.Vector;
 
