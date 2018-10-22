@@ -1,11 +1,11 @@
-package classes;
+package unittest;
 
+import classes.Cube;
+import classes.JSONFile;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class JSONFileTest {
-    @org.junit.jupiter.api.Test
+    @Test
     void save() {
         //Cube with a length,width and height of 10
         String saveString = "Cube|10.0|10.0|10.0";
@@ -13,7 +13,7 @@ class JSONFileTest {
         file.save();
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void loadFile() {
         JSONFile file = new JSONFile();
         System.out.print(file.loadFile().toString());

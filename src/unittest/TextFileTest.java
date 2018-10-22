@@ -1,6 +1,6 @@
-package classes;
+package unittest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import classes.TextFile;
 
 class TextFileTest {
 

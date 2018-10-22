@@ -1,8 +1,9 @@
-package classes;
+package unittest;
 
+import classes.Cube;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CubeTest {
 
@@ -20,6 +21,6 @@ class CubeTest {
 
     @Test
     void getCubesFromDB() {
-        System.out.print(Cube.GetCubesFromDB().toString());
+        System.out.print(Cube.getCubesFromDB().toString());
     }
 }

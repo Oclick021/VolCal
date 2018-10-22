@@ -30,7 +30,7 @@ public class TextFile implements IFile {
         }
 
         ArrayList<String> text = getFile();
-        if (saveString != ""){
+        if (!saveString.equals("")){
             if (!text.contains(saveString)){
                 text.add(saveString);
             }
@@ -93,9 +93,7 @@ public class TextFile implements IFile {
                     text.add(line);
             }
 
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
+        }  catch (IOException ex) {
             ex.printStackTrace();
         }
 
@@ -154,8 +152,8 @@ public class TextFile implements IFile {
         }
         else{
             try{
-                f.createNewFile();
-                return checkConnection();
+             boolean result =    f.createNewFile();
+                return result;
             }
             catch(Exception e){
 
