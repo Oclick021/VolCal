@@ -5,6 +5,7 @@ import interfaces.IShape;
 import java.sql.ResultSet;
 import java.util.Vector;
 
+
 public class Cube implements IShape {
 
     private int cubeID = 0;
@@ -27,13 +28,12 @@ public class Cube implements IShape {
     @Override
     public void saveOnDB() {
         DbConnector con = new DbConnector();
-        if (cubeID == 0)
-            con.Insert(String.format("INSERT IGNORE INTO cube (height, lenght, width)\n" +
+        if (cubeID == 0) {
+            con.insert(String.format("INSERT IGNORE INTO cube (height, lenght, width)\n" +
                     "  VALUES (%s, %s, %s)", height, length, width));
-        else
-            con.Insert(String.format("UPDATE cube SET height = %s, lenght = %s,width = %s WHERE cub1 = %s", height, length, width, cubeID));
+        } else
+            con.insert(String.format("UPDATE cube SET height = %s, lenght = %s,width = %s WHERE cub1 = %s", height, length, width, cubeID));
     }
-
     @Override
     public void saveAsJson() {
         String cubeString = String.format("Cube|%s|%s|%s", "" + length, "" + height, "" + width);
@@ -76,7 +76,7 @@ public class Cube implements IShape {
     }
 
 
-    public static Vector<Cube> GetCubesFromDB() {
+    public static Vector<Cube> getCubesFromDB() {
         Vector<Cube> cubes = new Vector<Cube>();
         DbConnector db = new DbConnector();
 
@@ -85,7 +85,8 @@ public class Cube implements IShape {
             while (rs.next()) {
                 cubes.add(new Cube(Double.parseDouble(rs.getString("lenght")), Double.parseDouble(rs.getString("width")), Double.parseDouble(rs.getString("height"))));
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
         }

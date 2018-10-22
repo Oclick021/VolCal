@@ -1,9 +1,6 @@
 package classes;
 
-import interfaces.IFile;
 import interfaces.IShape;
-
-import java.io.PrintWriter;
 
 import java.sql.ResultSet;
 import java.util.Vector;
@@ -54,9 +51,9 @@ public  class Sphere implements IShape {
     }
     public void saveOnDB() {
         DbConnector con = new DbConnector();
-        con.Insert(String.format("INSERT IGNORE INTO sphere (radius) VALUES (%s)",getRadius()));
+        con.insert(String.format("INSERT IGNORE INTO sphere (radius) VALUES (%s)",getRadius()));
     }
-    public static Vector<Sphere> GetCylinderFromDB(){
+    public static Vector<Sphere> getCylinderFromDB(){
         Vector<Sphere> spheres= new Vector<Sphere>();
         DbConnector db = new DbConnector();
 

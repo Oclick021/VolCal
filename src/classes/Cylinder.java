@@ -27,10 +27,10 @@ public class Cylinder implements IShape {
     public void saveOnDB() {
         DbConnector con = new DbConnector();
         if (cylinderID == 0)
-            con.Insert(String.format("INSERT IGNORE INTO cylinder (radius, height)\n" +
+            con.insert(String.format("INSERT IGNORE INTO cylinder (radius, height)\n" +
                     "  VALUES (%s, %s)", radius, height));
         else
-            con.Insert(String.format("UPDATE cylinder SET radius = %s, height = %s WHERE cylinderID = %s", radius, height, cylinderID));
+            con.insert(String.format("UPDATE cylinder SET radius = %s, height = %s WHERE cylinderID = %s", radius, height, cylinderID));
     }
 
     public void saveAsJson(){
@@ -40,7 +40,9 @@ public class Cylinder implements IShape {
     }
 
 
+    public void saveAsDatabase(){
 
+    }
 
     public void saveAsText(){
         String cylinderString = String.format("Cylinder|%s|%s", ""+height, ""+radius);
@@ -68,7 +70,7 @@ public class Cylinder implements IShape {
     }
 
 
-    public static Vector<Cylinder> GetCylinderFromDB(){
+    public static Vector<Cylinder> getCylinderFromDB(){
         Vector<Cylinder> cylinders = new Vector<Cylinder>();
         DbConnector db = new DbConnector();
 

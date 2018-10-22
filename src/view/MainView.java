@@ -20,12 +20,22 @@ public class MainView {
     private JTabbedPane TabMain;
     private JPanel panel1;
     private JList HistoryList;
-    private JTextField txtBlokHoogte, txtboxBlokLengte,txtBlokBreede, txtboxCylinderStraal, txtboxCylinderHoogte;
-    private JLabel lblBolAnswer,lblBolStraal,lblBlokHoogte, lblBlokLengte,lblBlokBreede,lblBlokAnswer, lblCylinderHoogte,lblCylinderStraal, lblCylinderAntwoord;
+    private JTextField txtBlokHoogte, txtboxBlokLengte, txtBlokBreede, txtboxCylinderStraal, txtboxCylinderHoogte;
+    private JLabel lblBolAnswer, lblBolStraal, lblBlokHoogte, lblBlokLengte, lblBlokBreede, lblBlokAnswer, lblCylinderHoogte, lblCylinderStraal, lblCylinderAntwoord;
     private JFormattedTextField txtBoxBolStraal;
     private JPanel bolPane;
     private JButton calculateButton, button1, button2;
     private JPanel j1, blokPanel, cilinderPanel;
+    private JTextField txtTranConeRadius1;
+    private JTextField txtTranConeRadius2;
+    private JTextField txtHollowCylRadius1;
+    private JTextField txtHollowCylRadius2;
+    private JTextField txtHollowCylHeight;
+    private JTextField txtTranConeHeight;
+    private JButton BtnTranculatedCone;
+    private JButton btnHollowCylinder;
+    private JLabel lblAnswerHollowCylinder;
+    private JLabel lblAnswerTranculatedCone;
 
     private Vector<IShape> historyListItems = new Vector<>();
 
@@ -35,6 +45,35 @@ public class MainView {
 
         addEvents();
 
+
+
+    }
+
+    void calculateTranculatedCone() {
+        if ( tryParseDouble(txtTranConeHeight.getText())&& tryParseDouble(txtTranConeRadius1.getText()) && tryParseDouble(txtTranConeRadius2.getText())){
+            double height = Double.parseDouble(txtTranConeHeight.getText());
+            double radius1 = Double.parseDouble(txtTranConeRadius1.getText());
+            double radius2 = Double.parseDouble(txtTranConeRadius2.getText());
+            TruncatedCone tc = new TruncatedCone(height,radius1,radius2);
+            lblAnswerTranculatedCone.setText(tc.getVolume()+"");
+            historyListItems.add(tc);
+            HistoryList.setListData(historyListItems);
+        }
+    }
+
+    void calculateHollowCylinder() {
+
+
+
+        if ( tryParseDouble(txtHollowCylHeight.getText())&& tryParseDouble(txtHollowCylRadius1.getText()) && tryParseDouble(txtHollowCylRadius2.getText())){
+            double height = Double.parseDouble(txtHollowCylHeight.getText());
+            double radius1 = Double.parseDouble(txtHollowCylRadius1.getText());
+            double radius2 = Double.parseDouble(txtHollowCylRadius2.getText());
+            HollowCylinder hc = new HollowCylinder(height,radius1,radius2);
+            lblAnswerHollowCylinder.setText(hc.getVolume()+"");
+            historyListItems.add(hc);
+            HistoryList.setListData(historyListItems);
+        }
 
     }
 
@@ -121,29 +160,49 @@ public class MainView {
     }
 
     void loadFromDB() {
-        try {
-            DbConnector db = new DbConnector();
-            if (db.isDbConnected()) {
-                historyListItems.clear();
-                historyListItems.addAll(Cube.GetCubesFromDB());
-                historyListItems.addAll(Sphere.GetCylinderFromDB());
-                historyListItems.addAll(Cylinder.GetCylinderFromDB());
-                HistoryList.setListData(historyListItems);
-            }
 
-        } catch (Exception e) {
-        }
+        historyListItems.clear();
+        historyListItems.addAll(Cube.getCubesFromDB());
+        historyListItems.addAll(Sphere.getCylinderFromDB());
+        historyListItems.addAll(Cylinder.getCylinderFromDB());
+        historyListItems.addAll(TruncatedCone.getTruncatedConeFromDB());
+        historyListItems.addAll(HollowCylinder.getCylinderFromDB());
+        HistoryList.setListData(historyListItems);
+    }
 
+    void loadFromText() {
+        historyListItems.clear();
+        TextFile file = new TextFile();
+        historyListItems.addAll(file.loadFile());
+        HistoryList.setListData(historyListItems);
+    }
 
+    void loadFromJSON() {
+        historyListItems.clear();
+        JSONFile file = new JSONFile();
+        historyListItems.addAll(file.loadFile());
+        HistoryList.setListData(historyListItems);
     }
 
     void saveOnDB() {
-        DbConnector db = new DbConnector();
-        if (db.isDbConnected()) {
         for (IShape i : historyListItems) {
             i.saveOnDB();
-        }}
+        }
     }
+
+    void saveAsText() {
+        for (IShape i : historyListItems) {
+            i.saveAsText();
+        }
+    }
+
+    void saveAsJson() {
+        for (IShape i : historyListItems) {
+            i.saveAsJson();
+        }
+    }
+
+
     boolean tryParseDouble(String value) {
         try {
             Double.parseDouble(value);
@@ -164,7 +223,18 @@ public class MainView {
 
     void addEvents() {
 
-
+        BtnTranculatedCone.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                calculateTranculatedCone();
+            }
+        });
+        btnHollowCylinder.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                calculateHollowCylinder();
+            }
+        });
         calculateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -194,6 +264,32 @@ public class MainView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 saveOnDB();
+            }
+        });
+        saveMenuJson.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveAsJson();
+            }
+        });
+        saveMenuItem.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveAsText();
+            }
+        });
+
+        loadMenuItem.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loadFromText();
+            }
+        });
+
+        loadMenuJson.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loadFromJSON();
             }
         });
         HistoryList.addListSelectionListener(new ListSelectionListener() {

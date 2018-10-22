@@ -40,6 +40,7 @@ public class DbConnector {
             Statement st = conn.createStatement();
             // execute the query, and get a java resultset
             ResultSet rs = st.executeQuery(query);
+
             return rs;
         } catch (Exception e) {
 
@@ -49,7 +50,7 @@ public class DbConnector {
         return null;
     }
 
-    public void Insert(String query) {
+    public void insert(String query) {
         try {
             Class.forName(myDriver);
             Connection conn = DriverManager.getConnection(myUrl, userName, passWord);
