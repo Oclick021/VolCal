@@ -97,7 +97,7 @@ public class JSONFile implements IFile {
 
         } catch (FileNotFoundException e) {
             try{
-                String path = appData + "\\VolCal.json";
+                String path = appData + "VolCal.json";
                 File file = new File(path);
                 file.createNewFile();
             }catch(Exception ex){

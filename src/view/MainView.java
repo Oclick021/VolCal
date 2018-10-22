@@ -46,35 +46,6 @@ public class MainView {
         addEvents();
 
 
-
-    }
-
-    void calculateTranculatedCone() {
-        if ( tryParseDouble(txtTranConeHeight.getText())&& tryParseDouble(txtTranConeRadius1.getText()) && tryParseDouble(txtTranConeRadius2.getText())){
-            double height = Double.parseDouble(txtTranConeHeight.getText());
-            double radius1 = Double.parseDouble(txtTranConeRadius1.getText());
-            double radius2 = Double.parseDouble(txtTranConeRadius2.getText());
-            TruncatedCone tc = new TruncatedCone(height,radius1,radius2);
-            lblAnswerTranculatedCone.setText(tc.getVolume()+"");
-            historyListItems.add(tc);
-            HistoryList.setListData(historyListItems);
-        }
-    }
-
-    void calculateHollowCylinder() {
-
-
-
-        if ( tryParseDouble(txtHollowCylHeight.getText())&& tryParseDouble(txtHollowCylRadius1.getText()) && tryParseDouble(txtHollowCylRadius2.getText())){
-            double height = Double.parseDouble(txtHollowCylHeight.getText());
-            double radius1 = Double.parseDouble(txtHollowCylRadius1.getText());
-            double radius2 = Double.parseDouble(txtHollowCylRadius2.getText());
-            HollowCylinder hc = new HollowCylinder(height,radius1,radius2);
-            lblAnswerHollowCylinder.setText(hc.getVolume()+"");
-            historyListItems.add(hc);
-            HistoryList.setListData(historyListItems);
-        }
-
     }
 
     void calculateCube() {
@@ -184,20 +155,33 @@ public class MainView {
         HistoryList.setListData(historyListItems);
     }
 
+    void loadFromText(){
+        historyListItems.clear();
+        TextFile file = new TextFile();
+        historyListItems.addAll(file.loadFile());
+        HistoryList.setListData(historyListItems);
+    }
+
+    void loadFromJSON(){
+        historyListItems.clear();
+        JSONFile file = new JSONFile();
+        historyListItems.addAll(file.loadFile());
+        HistoryList.setListData(historyListItems);
+    }
+
     void saveOnDB() {
         for (IShape i : historyListItems) {
             i.saveOnDB();
         }
     }
 
-    void saveAsText() {
-        for (IShape i : historyListItems) {
+    void saveAsText(){
+        for (IShape i : historyListItems){
             i.saveAsText();
         }
     }
-
-    void saveAsJson() {
-        for (IShape i : historyListItems) {
+    void saveAsJson(){
+        for (IShape i : historyListItems){
             i.saveAsJson();
         }
     }
@@ -297,6 +281,7 @@ public class MainView {
             public void valueChanged(ListSelectionEvent e) {
                 JList source = (JList) e.getSource();
                 IShape selected = (IShape) source.getSelectedValue();
+
 
 
                 if (selected instanceof Cube) {

@@ -1,18 +1,21 @@
 package classes;
 
+import interfaces.IFile;
 import interfaces.IShape;
 
+import java.io.PrintWriter;
+
+public  class Cube implements IShape {
 import java.sql.ResultSet;
 import java.util.Vector;
 
+public  class Cube implements IShape  {
 
-public class Cube implements IShape {
-
-    private int cubeID = 0;
+    private  int cubeID = 0;
     private double length;
-    private double width;
-    private double height;
-
+    private  double width;
+    private  double height;
+    private String appData;
 
     public Cube(double lenght, double width, double height) {
         this.length = lenght;
@@ -21,7 +24,7 @@ public class Cube implements IShape {
     }
 
     @Override
-    public double getVolume() {
+    public  double getVolume() {
         return (length * width * height);
     }
 

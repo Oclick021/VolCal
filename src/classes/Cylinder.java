@@ -35,13 +35,8 @@ public class Cylinder implements IShape {
 
     public void saveAsJson(){
         String cylinderString = String.format("Cylinder|%s|%s", ""+height, ""+radius);
-        JSONFile file = new JSONFile("Sphere", cylinderString);
+        JSONFile file = new JSONFile("Cylinder", cylinderString);
         file.save();
-    }
-
-
-    public void saveAsDatabase(){
-
     }
 
     public void saveAsText(){
