@@ -53,7 +53,7 @@ public  class Sphere implements IShape {
         DbConnector con = new DbConnector();
         con.insert(String.format("INSERT IGNORE INTO sphere (radius) VALUES (%s)",getRadius()));
     }
-    public static Vector<Sphere> GetCylinderFromDB(){
+    public static Vector<Sphere> getCylinderFromDB(){
         Vector<Sphere> spheres= new Vector<Sphere>();
         DbConnector db = new DbConnector();
 

@@ -26,7 +26,8 @@ public class HollowCylinder implements IShape {
     @Override
     public void saveOnDB() {
         DbConnector con = new DbConnector();
-        con.insert(String.format("UPDATE hollowCylinder SET radius1 = %s radius2 = %s, height = %s:", radius1,radius2 ,height));
+        con.insert(String.format("INSERT ignore INTO hollowcylinder (height, radius1, radius2)\n" +
+                "  VALUES (%s, %s, %s)", height,radius1 ,radius2));
     }
 
     public void saveAsJson(){
@@ -69,12 +70,12 @@ public class HollowCylinder implements IShape {
 
 
 
-    public static Vector<HollowCylinder> GetCylinderFromDB(){
+    public static Vector<HollowCylinder> getCylinderFromDB(){
         Vector<HollowCylinder> hollowCylinders = new Vector<HollowCylinder>();
         DbConnector db = new DbConnector();
 
         try{
-            ResultSet rs = db.get("SELECT  * FROM  HollowCylinder");
+            ResultSet rs = db.get("Select * from hollowcylinder");
             while (rs.next()) {
                 hollowCylinders.add(new HollowCylinder(Double.parseDouble(rs.getString("height")),Double.parseDouble(rs.getString("radius1")),Double.parseDouble(rs.getString("radius2"))));
             }

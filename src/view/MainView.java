@@ -20,28 +20,24 @@ public class MainView {
     private JTabbedPane TabMain;
     private JPanel panel1;
     private JList HistoryList;
-    private JTextField txtBlokHoogte;
-    private JTextField txtboxBlokLengte;
-    private JTextField txtBlokBreede;
-    private JTextField txtboxCylinderStraal;
-    private JTextField txtboxCylinderHoogte;
-    private JLabel lblBolAnswer;
-    private JLabel lblBolStraal;
-    private JLabel lblBlokHoogte;
-    private JLabel lblBlokLengte;
-    private JLabel lblBlokBreede;
-    private JLabel lblBlokAnswer;
-    private JLabel lblCylinderHoogte;
-    private JLabel lblCylinderStraal;
-    private JLabel lblCylinderAntwoord;
+    private JTextField txtBlokHoogte, txtboxBlokLengte, txtBlokBreede, txtboxCylinderStraal, txtboxCylinderHoogte;
+    private JLabel lblBolAnswer, lblBolStraal, lblBlokHoogte, lblBlokLengte, lblBlokBreede, lblBlokAnswer, lblCylinderHoogte, lblCylinderStraal, lblCylinderAntwoord;
     private JFormattedTextField txtBoxBolStraal;
     private JPanel bolPane;
-    private JButton calculateButton;
-    private JButton button1;
-    private JButton button2;
-    private JPanel j1;
-    private JPanel blokPanel;
-    private JPanel cilinderPanel;
+    private JButton calculateButton, button1, button2;
+    private JPanel j1, blokPanel, cilinderPanel;
+    private JTextField txtTranConeRadius1;
+    private JTextField txtTranConeRadius2;
+    private JTextField txtHollowCylRadius1;
+    private JTextField txtHollowCylRadius2;
+    private JTextField txtHollowCylHeight;
+    private JTextField txtTranConeHeight;
+    private JButton BtnTranculatedCone;
+    private JButton btnHollowCylinder;
+    private JLabel lblAnswerHollowCylinder;
+    private JLabel lblAnswerTranculatedCone;
+    private JButton deleteButton;
+    private JButton cleanAllButton;
 
     private Vector<IShape> historyListItems = new Vector<>();
 
@@ -52,6 +48,56 @@ public class MainView {
         addEvents();
 
 
+        cleanAllButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                historyListItems.clear();
+                HistoryList.setListData(historyListItems);
+
+            }
+        });
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedIndex = HistoryList.getSelectedIndex();
+                historyListItems.remove(selectedIndex);
+                HistoryList.setListData(historyListItems);
+            }
+        });
+        cleanAllButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                historyListItems.clear();
+                HistoryList.setListData(historyListItems);
+            }
+        });
+    }
+
+    void calculateTranculatedCone() {
+        if ( tryParseDouble(txtTranConeHeight.getText())&& tryParseDouble(txtTranConeRadius1.getText()) && tryParseDouble(txtTranConeRadius2.getText())){
+            double height = Double.parseDouble(txtTranConeHeight.getText());
+            double radius1 = Double.parseDouble(txtTranConeRadius1.getText());
+            double radius2 = Double.parseDouble(txtTranConeRadius2.getText());
+            TruncatedCone tc = new TruncatedCone(height,radius1,radius2);
+            lblAnswerTranculatedCone.setText(tc.getVolume()+"");
+            historyListItems.add(tc);
+            HistoryList.setListData(historyListItems);
+        }
+    }
+
+    void calculateHollowCylinder() {
+
+
+
+        if ( tryParseDouble(txtHollowCylHeight.getText())&& tryParseDouble(txtHollowCylRadius1.getText()) && tryParseDouble(txtHollowCylRadius2.getText())){
+            double height = Double.parseDouble(txtHollowCylHeight.getText());
+            double radius1 = Double.parseDouble(txtHollowCylRadius1.getText());
+            double radius2 = Double.parseDouble(txtHollowCylRadius2.getText());
+            HollowCylinder hc = new HollowCylinder(height,radius1,radius2);
+            lblAnswerHollowCylinder.setText(hc.getVolume()+"");
+            historyListItems.add(hc);
+            HistoryList.setListData(historyListItems);
+        }
     }
 
     void calculateCube() {
@@ -64,8 +110,6 @@ public class MainView {
             historyListItems.add(cube);
             HistoryList.setListData(historyListItems);
         }
-
-
     }
 
     void calculateCylinder() {
@@ -94,25 +138,25 @@ public class MainView {
     }
 
     void createWindow() {
-        frame = new JFrame("MainView");
-        frame.setContentPane(panel1);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setSize(800, 800);
-        frame.setJMenuBar(mb);
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        frame.setLocation(dim.width / 2 - frame.getSize().width / 2, dim.height / 2 - frame.getSize().height / 2);
-        frame.setLayout(null);
-        frame.setVisible(true);
+            frame = new JFrame("MainView");
+            frame.setContentPane(panel1);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.pack();
+            frame.setSize(800, 800);
+            frame.setJMenuBar(mb);
+            Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+            frame.setLocation(dim.width / 2 - frame.getSize().width / 2, dim.height / 2 - frame.getSize().height / 2);
+            frame.setLayout(null);
+            frame.setVisible(true);
     }
 
     void createMenubar() {
         menu = new JMenu("Menu");
-        saveSubMenu = new JMenu("Save");
-        saveMenuItem = new JMenuItem("Save in file");
-        saveMenuJson = new JMenuItem("Save in Json");
+        saveSubMenu = new JMenu("Opslaan");
+        saveMenuItem = new JMenuItem("Opslaan als tekst");
+        saveMenuJson = new JMenuItem("Opslaan als JSON");
 
-        saveInDBMenuITem = new JMenuItem("Save in database");
+        saveInDBMenuITem = new JMenuItem("Opslaan in database ");
 
         saveSubMenu.add(saveMenuItem);
         saveSubMenu.add(saveMenuJson);
@@ -120,10 +164,10 @@ public class MainView {
 
         menu.add(saveSubMenu);
 
-        loadSubMenu = new JMenu("Load");
-        loadMenuItem = new JMenuItem("Load from file");
-        loadMenuJson = new JMenuItem("Load from Json");
-        loadFromDBMenuITem = new JMenuItem("Load from databse");
+        loadSubMenu = new JMenu("Laden");
+        loadMenuItem = new JMenuItem("Laden uit tekst");
+        loadMenuJson = new JMenuItem("Laden uit JSON");
+        loadFromDBMenuITem = new JMenuItem("Laden uit database");
 
 
         loadSubMenu.add(loadMenuItem);
@@ -139,27 +183,40 @@ public class MainView {
     void loadFromDB() {
 
         historyListItems.clear();
-        historyListItems.addAll(Cube.GetCubesFromDB());
-        historyListItems.addAll(Sphere.GetCylinderFromDB());
-        historyListItems.addAll(Cylinder.GetCylinderFromDB());
+        historyListItems.addAll(Cube.getCubesFromDB());
+        historyListItems.addAll(Sphere.getCylinderFromDB());
+        historyListItems.addAll(Cylinder.getCylinderFromDB());
+        historyListItems.addAll(TruncatedCone.getTruncatedConeFromDB());
+        historyListItems.addAll(HollowCylinder.getCylinderFromDB());
         HistoryList.setListData(historyListItems);
     }
 
-    void loadFromText(){
+    void loadFromText() {
         historyListItems.clear();
         TextFile file = new TextFile();
         historyListItems.addAll(file.loadFile());
         HistoryList.setListData(historyListItems);
     }
 
-    void loadFromJSON(){
+    void loadFromJSON() {
         historyListItems.clear();
         JSONFile file = new JSONFile();
         historyListItems.addAll(file.loadFile());
         HistoryList.setListData(historyListItems);
     }
 
+
+
+
     void saveOnDB() {
+
+        DbConnector db = new DbConnector();
+        db.insert("DELETE  FROM cube");
+        db.insert("DELETE  FROM cylinder");
+        db.insert("DELETE  FROM sphere");
+        db.insert("DELETE  FROM truncatedcone");
+        db.insert("DELETE  FROM hollowcylinder");
+
         for (IShape i : historyListItems) {
             i.saveOnDB();
         }
@@ -187,17 +244,21 @@ public class MainView {
     }
 
 
-    void load(boolean isLocal) {
-
-    }
-
-    void save(boolean isLocal) {
-
-    }
 
     void addEvents() {
 
-
+        BtnTranculatedCone.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                calculateTranculatedCone();
+            }
+        });
+        btnHollowCylinder.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                calculateHollowCylinder();
+            }
+        });
         calculateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -258,31 +319,31 @@ public class MainView {
         HistoryList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                JList source = (JList)e.getSource();
-                IShape selected =(IShape)source.getSelectedValue();
+                JList source = (JList) e.getSource();
+                IShape selected = (IShape) source.getSelectedValue();
 
 
 
                 if (selected instanceof Cube) {
                     TabMain.setSelectedIndex(1);
                     Cube cb = (Cube) selected;
-                    txtBlokHoogte.setText(cb.getHeight()+"");
-                    txtBlokBreede.setText(cb.getWidth()+"");
-                    txtboxBlokLengte.setText(cb.getLength()+"");
-                    lblBlokAnswer.setText(cb.getVolume()+"");
+                    txtBlokHoogte.setText(cb.getHeight() + "");
+                    txtBlokBreede.setText(cb.getWidth() + "");
+                    txtboxBlokLengte.setText(cb.getLength() + "");
+                    lblBlokAnswer.setText(cb.getVolume() + "");
 
                 } else if (selected instanceof Cylinder) {
                     TabMain.setSelectedIndex(2);
-                    Cylinder cl = (Cylinder)selected;
-                    txtboxCylinderHoogte.setText(cl.getHeight()+"");
-                    txtboxCylinderStraal.setText(cl.getRadius()+"");
-                    lblCylinderAntwoord.setText(cl.getVolume()+"");
+                    Cylinder cl = (Cylinder) selected;
+                    txtboxCylinderHoogte.setText(cl.getHeight() + "");
+                    txtboxCylinderStraal.setText(cl.getRadius() + "");
+                    lblCylinderAntwoord.setText(cl.getVolume() + "");
 
                 } else if (selected instanceof Sphere) {
                     TabMain.setSelectedIndex(0);
-                    Sphere sp = (Sphere)selected;
-                    txtBoxBolStraal.setText(sp.getRadius()+"");
-                    lblBolAnswer.setText(sp.getVolume()+"");
+                    Sphere sp = (Sphere) selected;
+                    txtBoxBolStraal.setText(sp.getRadius() + "");
+                    lblBolAnswer.setText(sp.getVolume() + "");
                 }
             }
         });

@@ -187,11 +187,11 @@ public class JSONFile implements IFile {
                          vector.add(cube);
                          break;
                      case 5:
-                         if (jo.get("Name").toString() == "TruncatedCone"){
+                         if (jo.get("Name").toString().equals("TruncatedCone")){
                              TruncatedCone cone = new TruncatedCone(Double.parseDouble(jo.get("Height").toString()), Double.parseDouble(jo.get("Radius1").toString()), Double.parseDouble(jo.get("Radius2").toString()));
                              vector.add(cone);
                          }
-                         else if(jo.get("Name").toString() == "HollowCylinder"){
+                         else if(jo.get("Name").toString().equals("HollowCylinder")){
                              HollowCylinder hCylinder = new HollowCylinder(Double.parseDouble(jo.get("Height").toString()), Double.parseDouble(jo.get("Radius1").toString()), Double.parseDouble(jo.get("Radius2").toString()));
                             vector.add(hCylinder);
                          }

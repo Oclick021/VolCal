@@ -65,7 +65,7 @@ public class Cylinder implements IShape {
     }
 
 
-    public static Vector<Cylinder> GetCylinderFromDB(){
+    public static Vector<Cylinder> getCylinderFromDB(){
         Vector<Cylinder> cylinders = new Vector<Cylinder>();
         DbConnector db = new DbConnector();
 

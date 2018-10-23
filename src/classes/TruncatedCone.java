@@ -26,7 +26,8 @@ public class TruncatedCone implements IShape {
     @Override
     public void saveOnDB() {
         DbConnector con = new DbConnector();
-        con.insert(String.format("UPDATE truncatedCone SET radius1 = %s radius2 = %s, height = %s:", radius1,radius2 ,height));
+        con.insert(String.format("INSERT ignore INTO truncatedcone (height, radius1, radius2)\n" +
+                "  VALUES (%s, %s, %s)", height,radius1,radius2));
     }
 
     public void saveAsJson(){
@@ -69,12 +70,12 @@ public class TruncatedCone implements IShape {
 
 
 
-    public static Vector<TruncatedCone> GetTruncatedConeFromDB(){
+    public static Vector<TruncatedCone> getTruncatedConeFromDB(){
         Vector<TruncatedCone> truncatedCones = new Vector<TruncatedCone>();
         DbConnector db = new DbConnector();
 
         try{
-            ResultSet rs = db.get("SELECT  * FROM  TruncatedCone");
+            ResultSet rs = db.get("SELECT  * FROM  truncatedcone");
             while (rs.next()) {
                 truncatedCones.add(new TruncatedCone(Double.parseDouble(rs.getString("height")),Double.parseDouble(rs.getString("radius1")),Double.parseDouble(rs.getString("radius2"))));
             }
