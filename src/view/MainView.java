@@ -98,7 +98,6 @@ public class MainView {
             historyListItems.add(hc);
             HistoryList.setListData(historyListItems);
         }
-
     }
 
     void calculateCube() {
@@ -111,6 +110,7 @@ public class MainView {
             historyListItems.add(cube);
             HistoryList.setListData(historyListItems);
         }
+
 
     }
 
@@ -140,25 +140,25 @@ public class MainView {
     }
 
     void createWindow() {
-        frame = new JFrame("MainView");
-        frame.setContentPane(panel1);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setSize(800, 800);
-        frame.setJMenuBar(mb);
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        frame.setLocation(dim.width / 2 - frame.getSize().width / 2, dim.height / 2 - frame.getSize().height / 2);
-        frame.setLayout(null);
-        frame.setVisible(true);
+            frame = new JFrame("MainView");
+            frame.setContentPane(panel1);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.pack();
+            frame.setSize(800, 800);
+            frame.setJMenuBar(mb);
+            Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+            frame.setLocation(dim.width / 2 - frame.getSize().width / 2, dim.height / 2 - frame.getSize().height / 2);
+            frame.setLayout(null);
+            frame.setVisible(true);
     }
 
     void createMenubar() {
         menu = new JMenu("Menu");
-        saveSubMenu = new JMenu("Save");
-        saveMenuItem = new JMenuItem("Save in file");
-        saveMenuJson = new JMenuItem("Save in Json");
+        saveSubMenu = new JMenu("Opslaan");
+        saveMenuItem = new JMenuItem("Opslaan als tekst");
+        saveMenuJson = new JMenuItem("Opslaan als JSON");
 
-        saveInDBMenuITem = new JMenuItem("Save in database");
+        saveInDBMenuITem = new JMenuItem("Opslaan in database ");
 
         saveSubMenu.add(saveMenuItem);
         saveSubMenu.add(saveMenuJson);
@@ -166,10 +166,10 @@ public class MainView {
 
         menu.add(saveSubMenu);
 
-        loadSubMenu = new JMenu("Load");
-        loadMenuItem = new JMenuItem("Load from file");
-        loadMenuJson = new JMenuItem("Load from Json");
-        loadFromDBMenuITem = new JMenuItem("Load from databse");
+        loadSubMenu = new JMenu("Laden");
+        loadMenuItem = new JMenuItem("Laden uit tekst");
+        loadMenuJson = new JMenuItem("Laden uit JSON");
+        loadFromDBMenuITem = new JMenuItem("Laden uit database");
 
 
         loadSubMenu.add(loadMenuItem);
