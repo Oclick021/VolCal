@@ -231,7 +231,7 @@
           <grid id="a0e39" layout-manager="GridLayoutManager" row-count="5" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="10" left="10" bottom="30" right="10"/>
             <constraints>
-              <tabbedpane title="Tranculated Cone"/>
+              <tabbedpane title="Afgeknotte kegel"/>
             </constraints>
             <properties>
               <background color="-1"/>
@@ -312,7 +312,7 @@
           <grid id="fa083" layout-manager="GridLayoutManager" row-count="5" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="10" left="10" bottom="30" right="10"/>
             <constraints>
-              <tabbedpane title="Hollow Cilinder"/>
+              <tabbedpane title="Holle cilinder"/>
             </constraints>
             <properties>
               <background color="-1"/>

@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.util.Vector;
 
 public class Cylinder implements IShape {
-    private  int cylinderID = 0;
 
     private  double height;
     private  double radius;
@@ -26,12 +25,10 @@ public class Cylinder implements IShape {
     @Override
     public void saveOnDB() {
         DbConnector con = new DbConnector();
-        if (cylinderID == 0)
+        if (con.isDbConnected())
             con.insert(String.format("INSERT IGNORE INTO cylinder (radius, height)\n" +
                     "  VALUES (%s, %s)", radius, height));
-        else
-            con.insert(String.format("UPDATE cylinder SET radius = %s, height = %s WHERE cylinderID = %s", radius, height, cylinderID));
-    }
+        }
 
     public void saveAsJson(){
         String cylinderString = String.format("Cylinder|%s|%s", ""+height, ""+radius);

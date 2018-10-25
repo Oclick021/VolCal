@@ -7,7 +7,6 @@ import java.util.Vector;
 
 public  class Cube implements IShape  {
 
-    private  int cubeID = 0;
     private double length;
     private  double width;
     private  double height;
@@ -27,11 +26,10 @@ public  class Cube implements IShape  {
     @Override
     public void saveOnDB() {
         DbConnector con = new DbConnector();
-        if (cubeID == 0) {
+        if (con.isDbConnected()) {
             con.insert(String.format("INSERT IGNORE INTO cube (height, lenght, width)\n" +
                     "  VALUES (%s, %s, %s)", height, length, width));
-        } else
-            con.insert(String.format("UPDATE cube SET height = %s, lenght = %s,width = %s WHERE cub1 = %s", height, length, width, cubeID));
+        }
     }
     @Override
     public void saveAsJson() {

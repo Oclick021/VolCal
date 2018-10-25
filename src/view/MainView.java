@@ -74,12 +74,12 @@ public class MainView {
     }
 
     void calculateTranculatedCone() {
-        if ( tryParseDouble(txtTranConeHeight.getText())&& tryParseDouble(txtTranConeRadius1.getText()) && tryParseDouble(txtTranConeRadius2.getText())){
+        if (tryParseDouble(txtTranConeHeight.getText()) && tryParseDouble(txtTranConeRadius1.getText()) && tryParseDouble(txtTranConeRadius2.getText())) {
             double height = Double.parseDouble(txtTranConeHeight.getText());
             double radius1 = Double.parseDouble(txtTranConeRadius1.getText());
             double radius2 = Double.parseDouble(txtTranConeRadius2.getText());
-            TruncatedCone tc = new TruncatedCone(height,radius1,radius2);
-            lblAnswerTranculatedCone.setText(tc.getVolume()+"");
+            TruncatedCone tc = new TruncatedCone(height, radius1, radius2);
+            lblAnswerTranculatedCone.setText(tc.getVolume() + "");
             historyListItems.add(tc);
             HistoryList.setListData(historyListItems);
         }
@@ -88,13 +88,12 @@ public class MainView {
     void calculateHollowCylinder() {
 
 
-
-        if ( tryParseDouble(txtHollowCylHeight.getText())&& tryParseDouble(txtHollowCylRadius1.getText()) && tryParseDouble(txtHollowCylRadius2.getText())){
+        if (tryParseDouble(txtHollowCylHeight.getText()) && tryParseDouble(txtHollowCylRadius1.getText()) && tryParseDouble(txtHollowCylRadius2.getText())) {
             double height = Double.parseDouble(txtHollowCylHeight.getText());
             double radius1 = Double.parseDouble(txtHollowCylRadius1.getText());
             double radius2 = Double.parseDouble(txtHollowCylRadius2.getText());
-            HollowCylinder hc = new HollowCylinder(height,radius1,radius2);
-            lblAnswerHollowCylinder.setText(hc.getVolume()+"");
+            HollowCylinder hc = new HollowCylinder(height, radius1, radius2);
+            lblAnswerHollowCylinder.setText(hc.getVolume() + "");
             historyListItems.add(hc);
             HistoryList.setListData(historyListItems);
         }
@@ -140,16 +139,16 @@ public class MainView {
     }
 
     void createWindow() {
-            frame = new JFrame("MainView");
-            frame.setContentPane(panel1);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.pack();
-            frame.setSize(800, 800);
-            frame.setJMenuBar(mb);
-            Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-            frame.setLocation(dim.width / 2 - frame.getSize().width / 2, dim.height / 2 - frame.getSize().height / 2);
-            frame.setLayout(null);
-            frame.setVisible(true);
+        frame = new JFrame("MainView");
+        frame.setContentPane(panel1);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setSize(800, 800);
+        frame.setJMenuBar(mb);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setLocation(dim.width / 2 - frame.getSize().width / 2, dim.height / 2 - frame.getSize().height / 2);
+        frame.setLayout(null);
+        frame.setVisible(true);
     }
 
     void createMenubar() {
@@ -184,13 +183,16 @@ public class MainView {
 
     void loadFromDB() {
 
-        historyListItems.clear();
-        historyListItems.addAll(Cube.getCubesFromDB());
-        historyListItems.addAll(Sphere.getCylinderFromDB());
-        historyListItems.addAll(Cylinder.getCylinderFromDB());
-        historyListItems.addAll(TruncatedCone.getTruncatedConeFromDB());
-        historyListItems.addAll(HollowCylinder.getCylinderFromDB());
-        HistoryList.setListData(historyListItems);
+        DbConnector db = new DbConnector();
+        if (db.isDbConnected()) {
+            historyListItems.clear();
+            historyListItems.addAll(Cube.getCubesFromDB());
+            historyListItems.addAll(Sphere.getCylinderFromDB());
+            historyListItems.addAll(Cylinder.getCylinderFromDB());
+            historyListItems.addAll(TruncatedCone.getTruncatedConeFromDB());
+            historyListItems.addAll(HollowCylinder.getCylinderFromDB());
+            HistoryList.setListData(historyListItems);
+        }
     }
 
     void loadFromText() {
@@ -208,29 +210,30 @@ public class MainView {
     }
 
 
-
-
     void saveOnDB() {
 
         DbConnector db = new DbConnector();
-        db.insert("DELETE  FROM cube");
-        db.insert("DELETE  FROM cylinder");
-        db.insert("DELETE  FROM sphere");
-        db.insert("DELETE  FROM truncatedcone");
-        db.insert("DELETE  FROM hollowcylinder");
+        if (db.isDbConnected()) {
+            db.insert("DELETE  FROM cube");
+            db.insert("DELETE  FROM cylinder");
+            db.insert("DELETE  FROM sphere");
+            db.insert("DELETE  FROM truncatedcone");
+            db.insert("DELETE  FROM hollowcylinder");
 
-        for (IShape i : historyListItems) {
-            i.saveOnDB();
+            for (IShape i : historyListItems) {
+                i.saveOnDB();
+            }
         }
     }
 
-    void saveAsText(){
-        for (IShape i : historyListItems){
+    void saveAsText() {
+        for (IShape i : historyListItems) {
             i.saveAsText();
         }
     }
-    void saveAsJson(){
-        for (IShape i : historyListItems){
+
+    void saveAsJson() {
+        for (IShape i : historyListItems) {
             i.saveAsJson();
         }
     }
@@ -244,7 +247,6 @@ public class MainView {
             return false;
         }
     }
-
 
 
     void addEvents() {
@@ -323,7 +325,6 @@ public class MainView {
             public void valueChanged(ListSelectionEvent e) {
                 JList source = (JList) e.getSource();
                 IShape selected = (IShape) source.getSelectedValue();
-
 
 
                 if (selected instanceof Cube) {
